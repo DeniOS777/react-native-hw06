@@ -2,8 +2,10 @@ import React, { useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
+import { store } from './src/redux/store';
+import { Provider } from 'react-redux';
 
-import { chooseNavigation } from './src/Routes';
+import { chooseNavigation } from './src/routes';
 
 const fontsMap = {
   'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
@@ -28,5 +30,9 @@ export default function App() {
     return null;
   }
 
-  return <NavigationContainer>{routes}</NavigationContainer>;
+  return (
+    <Provider store={store}>
+      <NavigationContainer>{routes}</NavigationContainer>
+    </Provider>
+  );
 }

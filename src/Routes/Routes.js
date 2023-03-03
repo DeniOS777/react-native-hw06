@@ -1,21 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RegistrationScreen } from '../Screens/RegistrationScreen';
-
-import { LoginScreen } from '../Screens/LoginScreen';
-import { PostsScreen } from '../Screens/PostsScreen';
-import { CreatePostsScreen } from '../Screens/CreatePostsScreen';
-import { ProfileScreen } from '../Screens/ProfileScreen';
-import { CommentsScreen } from '../Screens/CommentsScreen';
-import { MapScreen } from '../Screens/MapScreen';
-
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { RegistrationScreen } from '../screens/RegistrationScreen';
+import { LoginScreen } from '../screens/LoginScreen';
+import { PostsScreen } from '../screens/PostsScreen';
+import { CreatePostsScreen } from '../screens/CreatePostsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { CommentsScreen } from '../screens/CommentsScreen';
+import { MapScreen } from '../screens/MapScreen';
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
