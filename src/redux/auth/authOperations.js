@@ -2,7 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
   updateProfile,
+  signOut,
 } from 'firebase/auth';
 
 import { auth } from '../../firebase/config';
@@ -31,10 +33,28 @@ export const authSignInUser = createAsyncThunk(
   async ({ email, password }, thunkAPI) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log('redux-signin', user.email);
-      console.log('redux-signup', user.uid);
+      console.log('redux-signin', user);
     } catch (error) {
-      console.log('catch-signin', error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const authChangeStateUser = createAsyncThunk(
+  'auth/changeStateUser',
+  async (_, thunkAPI) => {
+    try {
+      let currentUser = null;
+      await onAuthStateChanged(auth, user => {
+        if (!user) return;
+        currentUser = user;
+      });
+      const dataToUpdate = {
+        login: currentUser.displayName,
+        userId: currentUser.uid,
+      };
+      return dataToUpdate;
+    } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -44,28 +64,9 @@ export const authSignOutUser = createAsyncThunk(
   'auth/signout',
   async (arg, thunkAPI) => {
     try {
+      await signOut();
     } catch (error) {
-      console.log('catch', error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-
-// export const authSignUpUser = createAsyncThunk(
-//   'auth/signup',
-//   async ({ login, email, password }, thunkAPI) => {
-//     try {
-//       const { user } = await createUserWithEmailAndPassword(
-//         auth,
-//         email,
-//         password
-//       );
-//       console.log('redux-signup', user.email);
-//       console.log('redux-signup', user.uid);
-//       return user.uid;
-//     } catch (error) {
-//       console.log('catch-signup', error.message);
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
