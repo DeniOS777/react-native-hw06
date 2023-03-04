@@ -1,9 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { store } from './src/redux/store';
 import { Provider } from 'react-redux';
+
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './src/firebase/config';
 
 import { chooseNavigation } from './src/routes';
 
@@ -16,7 +19,13 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts(fontsMap);
-  const routes = chooseNavigation(null);
+  const [user, setUser] = useState(false); //----------------------
+
+  onAuthStateChanged(auth, user => {
+    setUser(user);
+  });
+
+  const routes = chooseNavigation(user);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
