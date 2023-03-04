@@ -21,7 +21,6 @@ export const authSignUpUser = createAsyncThunk(
       };
       return dataToUpdate;
     } catch (error) {
-      console.log('catch-signup', error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
