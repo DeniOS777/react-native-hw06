@@ -16,7 +16,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts(fontsMap);
-  const routes = chooseNavigation({});
+  const routes = chooseNavigation(null);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {

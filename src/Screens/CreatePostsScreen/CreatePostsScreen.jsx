@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -10,6 +10,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,12 +18,20 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { styles } from './CreatePostsScreen.styled';
 
 export const CreatePostsScreen = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [type, setType] = useState(CameraType.back);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState('');
   const [title, setTitle] = useState('');
   const [place, setPlace] = useState('');
   const [isFocus, setIsFocus] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      await Camera.requestCameraPermissionsAsync();
+      await Location.requestForegroundPermissionsAsync();
+    })();
+  }, []);
 
   const handleTitle = text => setTitle(text);
   const handlePlace = text => setPlace(text);
@@ -51,6 +60,8 @@ export const CreatePostsScreen = ({ navigation }) => {
     setPlace('');
   };
 
+  console.log(isFocused);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -58,16 +69,18 @@ export const CreatePostsScreen = ({ navigation }) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Camera ref={setCameraRef} type={type} style={styles.camera}>
-            {photo && <Image source={{ uri: photo }} style={styles.image} />}
-            <TouchableOpacity
-              onPress={makePhoto}
-              activeOpacity={0.8}
-              style={styles.addPhotoButton}
-            >
-              <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-          </Camera>
+          {isFocused ? (
+            <Camera ref={setCameraRef} type={type} style={styles.camera}>
+              {photo && <Image source={{ uri: photo }} style={styles.image} />}
+              <TouchableOpacity
+                onPress={makePhoto}
+                activeOpacity={0.8}
+                style={styles.addPhotoButton}
+              >
+                <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            </Camera>
+          ) : null}
           <Text style={styles.downloadTitle}>Загрузите фото</Text>
 
           <View style={{ paddingBottom: isFocus ? 100 : 20 }}>

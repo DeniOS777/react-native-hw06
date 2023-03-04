@@ -10,6 +10,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { authSignInUser } from '../../redux/auth/authOperations';
+import { useDispatch } from 'react-redux';
+
 import { styles } from './LoginScreen.styled';
 
 const imagePath = require('../../../assets/images/bg-photo.png');
@@ -21,6 +24,8 @@ export const LoginScreen = ({ navigation }) => {
   const [isFocusedPassword, setFocusedPassword] = useState(false);
   const [isSpaceKeyboard, setIsSpaceKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleEmail = text => setEmail(text);
   const handlePassword = text => {
@@ -53,7 +58,7 @@ export const LoginScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     if (!email || !password) return;
-    console.log({ email, password });
+    dispatch(authSignInUser({ email, password }));
     setEmail('');
     setPassword('');
   };
