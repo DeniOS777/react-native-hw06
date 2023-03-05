@@ -33,7 +33,11 @@ export const authSignInUser = createAsyncThunk(
   async ({ email, password }, thunkAPI) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log('redux-signin', user);
+      const dataToWrite = {
+        login: user.displayName,
+        userId: user.uid,
+      };
+      return dataToWrite;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -46,8 +50,9 @@ export const authChangeStateUser = createAsyncThunk(
     try {
       let currentUser = null;
       await onAuthStateChanged(auth, user => {
-        if (!user) return;
-        currentUser = user;
+        if (user) {
+          currentUser = user;
+        }
       });
       const dataToUpdate = {
         login: currentUser.displayName,
@@ -55,6 +60,7 @@ export const authChangeStateUser = createAsyncThunk(
       };
       return dataToUpdate;
     } catch (error) {
+      console.log(error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -62,9 +68,9 @@ export const authChangeStateUser = createAsyncThunk(
 
 export const authSignOutUser = createAsyncThunk(
   'auth/signout',
-  async (arg, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      await signOut();
+      await signOut(auth);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
