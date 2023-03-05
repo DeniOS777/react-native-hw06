@@ -14,10 +14,17 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import { nanoid } from 'nanoid';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
+
+import { storage, db } from '../../firebase/config';
 
 import { styles } from './CreatePostsScreen.styled';
 
 export const CreatePostsScreen = ({ navigation }) => {
+  const { login, userId } = useSelector(state => state.auth);
   const isFocused = useIsFocused();
   const [type, setType] = useState(CameraType.back);
   const [cameraRef, setCameraRef] = useState(null);
@@ -47,20 +54,37 @@ export const CreatePostsScreen = ({ navigation }) => {
     return true;
   };
 
-  const sendPost = async () => {
+  const uploadPhotoToStorage = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const photoId = nanoid();
+    const storageRef = ref(storage, `postImage/${photoId}`);
+    await uploadBytes(storageRef, file);
+
+    return await getDownloadURL(ref(storage, `postImage/${photoId}`));
+  };
+
+  const uploadPostToServer = async () => {
     if (!isPostReady()) return;
     const response = await Location.getCurrentPositionAsync({});
     const location = {
       longitude: response.coords.longitude,
       latitude: response.coords.latitude,
     };
+    const photoFromStorage = await uploadPhotoToStorage();
+    await addDoc(collection(db, 'posts'), {
+      userId,
+      login,
+      photo: photoFromStorage,
+      title,
+      place,
+      location,
+    });
     navigation.navigate('Posts', { photo, title, place, location });
     setPhoto('');
     setTitle('');
     setPlace('');
   };
-
-  console.log(isFocused);
 
   return (
     <KeyboardAvoidingView
@@ -100,7 +124,7 @@ export const CreatePostsScreen = ({ navigation }) => {
               style={styles.inputLocation}
             />
             <TouchableOpacity
-              onPress={sendPost}
+              onPress={uploadPostToServer}
               activeOpacity={0.8}
               style={{
                 ...styles.button,
