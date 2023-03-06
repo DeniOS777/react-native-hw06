@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
+import { collection, getDocs, doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 
 import { styles } from './PostsScreen.styled';
 
@@ -32,13 +34,20 @@ const Item = ({ item, navigation }) => (
   </View>
 );
 
-export const PostsScreen = ({ navigation, route }) => {
+export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
+  const getAllPosts = async () => {
+    onSnapshot(collection(db, 'posts'), data =>
+      setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+    );
+  };
+
   useEffect(() => {
-    if (!route.params) return;
-    setPosts(prevPosts => [route.params, ...prevPosts]);
-  }, [route.params]);
+    getAllPosts();
+  }, []);
+
+  console.log('In state', posts);
 
   return (
     <View style={styles.container}>
@@ -62,9 +71,19 @@ export const PostsScreen = ({ navigation, route }) => {
           renderItem={({ item }) => (
             <Item navigation={navigation} item={item} />
           )}
-          keyExtractor={item => item.title}
+          keyExtractor={item => item.id}
         />
       </View>
     </View>
   );
 };
+
+// const getAllPosts = async () => {
+//   const querySnapshot = await getDocs(collection(db, 'posts'));
+//   setPosts(
+//     querySnapshot.docs.map(doc => ({
+//       ...doc.data(),
+//       id: doc.id,
+//     }))
+//   );
+// };
