@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -13,41 +13,22 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 import { styles } from './CommentsScreen.styled';
 
-const list = [
-  {
-    id: '1',
-    text: 'Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!',
-    url: 'https://via.placeholder.com/28x28',
-    date: '09 июня, 2020 | 08:40',
-  },
-  {
-    id: '2',
-    text: 'A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.',
-    url: 'https://via.placeholder.com/28x28',
-    date: '09 июня, 2020 | 09:14',
-  },
-  {
-    id: '3',
-    text: 'Thank you! That was very helpful!',
-    url: 'https://via.placeholder.com/28x28',
-    date: '09 июня, 2020 | 09:20',
-  },
-];
+const dummyUrl = 'https://via.placeholder.com/28x28';
 
 const Item = ({ item }) => (
   <View style={styles.itemComments}>
     <View style={styles.imageWrap}>
-      <Image style={styles.imageAvatar} source={{ uri: `${item.url}` }} />
+      <Image style={styles.imageAvatar} source={{ uri: dummyUrl }} />
     </View>
 
     <View style={styles.textCommentsWrap}>
-      <Text style={styles.text}>{item.text}</Text>
-      <Text style={styles.date}>{item.date}</Text>
+      <Text style={styles.text}>{item.comment}</Text>
+      <Text style={styles.date}>{new Date().toLocaleString()}</Text>
     </View>
   </View>
 );
@@ -56,6 +37,7 @@ export const CommentsScreen = ({ route }) => {
   const { photo, postId } = route.params;
   const { login } = useSelector(state => state.auth);
   const [comment, setComment] = useState('');
+  const [allComments, setAllComments] = useState([]);
 
   const handleInput = text => setComment(text);
 
@@ -67,11 +49,24 @@ export const CommentsScreen = ({ route }) => {
     });
   };
 
+  const downloadCommentsFromServer = async () => {
+    const postsRef = collection(db, 'posts');
+    onSnapshot(collection(postsRef, postId, 'comments'), data =>
+      setAllComments(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+    );
+  };
+
+  useEffect(() => {
+    downloadCommentsFromServer();
+  }, []);
+
   const submitComment = async () => {
     if (!comment) return;
     uploadCommentToServer();
     setComment('');
   };
+
+  // const totalCountOfComments = allComments.length;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -86,7 +81,7 @@ export const CommentsScreen = ({ route }) => {
 
           <View style={{ height: 210 }}>
             <FlatList
-              data={list}
+              data={allComments}
               renderItem={({ item }) => <Item item={item} />}
               keyExtractor={item => item.id}
             />

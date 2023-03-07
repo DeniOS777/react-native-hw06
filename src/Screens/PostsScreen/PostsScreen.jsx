@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { EvilIcons } from '@expo/vector-icons';
-import { collection, getDocs, doc, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 import { styles } from './PostsScreen.styled';
@@ -24,7 +24,7 @@ const Item = ({ item, navigation }) => (
         >
           <EvilIcons name="comment" size={24} color="#BDBDBD" />
         </TouchableOpacity>
-        <Text style={styles.textComment}>{item.comments}</Text>
+        <Text style={styles.textComment}>1</Text>
       </View>
 
       <View style={styles.wrapContainer}>
@@ -50,8 +50,21 @@ export const PostsScreen = ({ navigation }) => {
     );
   };
 
+  const totlaCountsComments = async () => {
+    const postsRef = collection(db, 'posts');
+    const commentsRef = collection(
+      postsRef,
+      'FkDizOHPyIw8754F9djS',
+      'comments'
+    );
+    const snapshot = await getCountFromServer(commentsRef);
+    const totalCount = snapshot.data().count;
+    console.log('CountComments', totalCount);
+  };
+
   useEffect(() => {
     getAllPosts();
+    totlaCountsComments();
   }, []);
 
   console.log('In state', posts);
