@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: '#E8E8E8',
   },
-  btnSendComments: {
+  btnSendComment: {
     position: 'absolute',
     right: 8,
     alignItems: 'center',

@@ -12,6 +12,10 @@ import {
   Platform,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+
 import { styles } from './CommentsScreen.styled';
 
 const list = [
@@ -49,14 +53,24 @@ const Item = ({ item }) => (
 );
 
 export const CommentsScreen = ({ route }) => {
-  const [comments, setComments] = useState('');
-  const { photo } = route.params;
+  const { photo, postId } = route.params;
+  const { login } = useSelector(state => state.auth);
+  const [comment, setComment] = useState('');
 
-  const handleInput = text => setComments(text);
+  const handleInput = text => setComment(text);
 
-  const handleComments = () => {
-    if (!comments) return;
-    setComments('');
+  const uploadCommentToServer = async () => {
+    const postsRef = collection(db, 'posts');
+    await addDoc(collection(postsRef, postId, 'comments'), {
+      login,
+      comment,
+    });
+  };
+
+  const submitComment = async () => {
+    if (!comment) return;
+    uploadCommentToServer();
+    setComment('');
   };
 
   return (
@@ -83,16 +97,16 @@ export const CommentsScreen = ({ route }) => {
               onFocus={null}
               onBlur={null}
               onChangeText={handleInput}
-              value={comments}
+              value={comment}
               keyboardType="default"
               placeholderTextColor="#BDBDBD"
               placeholder="Комментировать..."
               style={styles.input}
             />
             <TouchableOpacity
-              onPress={handleComments}
+              onPress={submitComment}
               activeOpacity={0.8}
-              style={styles.btnSendComments}
+              style={styles.btnSendComment}
             >
               <Feather name="arrow-up" size={24} color="#ffffff" />
             </TouchableOpacity>

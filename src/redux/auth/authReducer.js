@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   authSignUpUser,
   authSignInUser,
-  authChangeStateUser,
   authRefreshUser,
   authSignOutUser,
 } from './authOperations';
@@ -12,6 +11,7 @@ export const authSlice = createSlice({
   initialState: {
     userId: null,
     login: null,
+    email: null,
     isLogedIn: false,
   },
   reducers: {},
@@ -20,22 +20,25 @@ export const authSlice = createSlice({
       .addCase(authSignUpUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
+        state.email = payload.email;
         state.isLogedIn = true;
       })
       .addCase(authSignInUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
+        state.email = payload.email;
         state.isLogedIn = true;
       })
       .addCase(authRefreshUser, (state, { payload }) => {
-        console.log('payload', payload);
         state.userId = payload.userId;
         state.login = payload.login;
+        state.email = payload.email;
         state.isLogedIn = true;
       })
       .addCase(authSignOutUser.fulfilled, state => {
         state.userId = null;
         state.login = null;
+        state.email = null;
         state.isLogedIn = false;
       });
   },

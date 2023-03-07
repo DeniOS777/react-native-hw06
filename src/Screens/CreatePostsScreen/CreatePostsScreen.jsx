@@ -81,7 +81,6 @@ export const CreatePostsScreen = ({ navigation }) => {
       location,
     });
     navigation.navigate('Posts');
-    // navigation.navigate('Posts', { photo, title, place, location });
     setPhoto('');
     setTitle('');
     setPlace('');

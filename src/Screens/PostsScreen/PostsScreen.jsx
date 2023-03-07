@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 import { EvilIcons } from '@expo/vector-icons';
 import { collection, getDocs, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -14,7 +15,12 @@ const Item = ({ item, navigation }) => (
       <View style={styles.wrapContainer}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Comments', { photo: item.photo })}
+          onPress={() =>
+            navigation.navigate('Comments', {
+              photo: item.photo,
+              postId: item.id,
+            })
+          }
         >
           <EvilIcons name="comment" size={24} color="#BDBDBD" />
         </TouchableOpacity>
@@ -36,6 +42,7 @@ const Item = ({ item, navigation }) => (
 
 export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
+  const { login, email } = useSelector(state => state.auth);
 
   const getAllPosts = async () => {
     onSnapshot(collection(db, 'posts'), data =>
@@ -60,8 +67,8 @@ export const PostsScreen = ({ navigation }) => {
         </View>
 
         <View>
-          <Text style={styles.textName}>Derek Menson</Text>
-          <Text style={styles.textEmail}>derek_menson@mail.com</Text>
+          <Text style={styles.textName}>{login}</Text>
+          <Text style={styles.textEmail}>{email}</Text>
         </View>
       </View>
 

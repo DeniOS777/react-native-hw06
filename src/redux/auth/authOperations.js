@@ -16,9 +16,10 @@ export const authSignUpUser = createAsyncThunk(
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
       await updateProfile(user, { displayName: login });
-      const { displayName, uid } = auth.currentUser;
+      const { displayName, email: userEmail, uid } = auth.currentUser;
       const dataToUpdate = {
         login: displayName,
+        email: userEmail,
         userId: uid,
       };
       return dataToUpdate;
@@ -35,6 +36,7 @@ export const authSignInUser = createAsyncThunk(
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       const dataToWrite = {
         login: user.displayName,
+        email: user.email,
         userId: user.uid,
       };
       return dataToWrite;
@@ -53,12 +55,12 @@ export const authChangeStateUser = createAsyncThunk(
       onAuthStateChanged(auth, user => {
         const dataToUpdate = {
           login: user.displayName,
+          email: user.email,
           userId: user.uid,
         };
         thunkAPI.dispatch(authRefreshUser(dataToUpdate));
       });
     } catch (error) {
-      console.log(error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -74,25 +76,3 @@ export const authSignOutUser = createAsyncThunk(
     }
   }
 );
-
-// export const authChangeStateUser = createAsyncThunk(
-//   'auth/changeStateUser',
-//   async (_, thunkAPI) => {
-//     try {
-//       let currentUser = null;
-//       await onAuthStateChanged(auth, user => {
-//         if (user) {
-//           currentUser = user;
-//         }
-//       });
-//       const dataToUpdate = {
-//         login: currentUser.displayName,
-//         userId: currentUser.uid,
-//       };
-//       return dataToUpdate;
-//     } catch (error) {
-//       console.log(error.message);
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
