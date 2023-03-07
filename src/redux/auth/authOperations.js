@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -44,21 +44,19 @@ export const authSignInUser = createAsyncThunk(
   }
 );
 
+export const authRefreshUser = createAction('auth/refreshUser');
+
 export const authChangeStateUser = createAsyncThunk(
   'auth/changeStateUser',
   async (_, thunkAPI) => {
     try {
-      let currentUser = null;
-      await onAuthStateChanged(auth, user => {
-        if (user) {
-          currentUser = user;
-        }
+      onAuthStateChanged(auth, user => {
+        const dataToUpdate = {
+          login: user.displayName,
+          userId: user.uid,
+        };
+        thunkAPI.dispatch(authRefreshUser(dataToUpdate));
       });
-      const dataToUpdate = {
-        login: currentUser.displayName,
-        userId: currentUser.uid,
-      };
-      return dataToUpdate;
     } catch (error) {
       console.log(error.message);
       return thunkAPI.rejectWithValue(error.message);
@@ -76,3 +74,25 @@ export const authSignOutUser = createAsyncThunk(
     }
   }
 );
+
+// export const authChangeStateUser = createAsyncThunk(
+//   'auth/changeStateUser',
+//   async (_, thunkAPI) => {
+//     try {
+//       let currentUser = null;
+//       await onAuthStateChanged(auth, user => {
+//         if (user) {
+//           currentUser = user;
+//         }
+//       });
+//       const dataToUpdate = {
+//         login: currentUser.displayName,
+//         userId: currentUser.uid,
+//       };
+//       return dataToUpdate;
+//     } catch (error) {
+//       console.log(error.message);
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+// );

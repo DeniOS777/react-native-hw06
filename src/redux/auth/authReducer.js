@@ -3,6 +3,7 @@ import {
   authSignUpUser,
   authSignInUser,
   authChangeStateUser,
+  authRefreshUser,
   authSignOutUser,
 } from './authOperations';
 
@@ -26,7 +27,8 @@ export const authSlice = createSlice({
         state.login = payload.login;
         state.isLogedIn = true;
       })
-      .addCase(authChangeStateUser.fulfilled, (state, { payload }) => {
+      .addCase(authRefreshUser, (state, { payload }) => {
+        console.log('payload', payload);
         state.userId = payload.userId;
         state.login = payload.login;
         state.isLogedIn = true;
