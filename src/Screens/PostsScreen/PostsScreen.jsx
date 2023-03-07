@@ -50,24 +50,9 @@ export const PostsScreen = ({ navigation }) => {
     );
   };
 
-  const totlaCountsComments = async () => {
-    const postsRef = collection(db, 'posts');
-    const commentsRef = collection(
-      postsRef,
-      'FkDizOHPyIw8754F9djS',
-      'comments'
-    );
-    const snapshot = await getCountFromServer(commentsRef);
-    const totalCount = snapshot.data().count;
-    console.log('CountComments', totalCount);
-  };
-
   useEffect(() => {
     getAllPosts();
-    totlaCountsComments();
   }, []);
-
-  console.log('In state', posts);
 
   return (
     <View style={styles.container}>
@@ -97,13 +82,3 @@ export const PostsScreen = ({ navigation }) => {
     </View>
   );
 };
-
-// const getAllPosts = async () => {
-//   const querySnapshot = await getDocs(collection(db, 'posts'));
-//   setPosts(
-//     querySnapshot.docs.map(doc => ({
-//       ...doc.data(),
-//       id: doc.id,
-//     }))
-//   );
-// };

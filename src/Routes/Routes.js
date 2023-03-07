@@ -27,7 +27,6 @@ const HomeTab = ({ navigation }) => {
   return (
     <Tab.Navigator
       initialRouteName="Posts"
-      // screenOptions={{ tabBarShowLabel: false }}
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
       })}

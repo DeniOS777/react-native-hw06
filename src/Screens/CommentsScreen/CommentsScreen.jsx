@@ -66,8 +66,6 @@ export const CommentsScreen = ({ route }) => {
     setComment('');
   };
 
-  // const totalCountOfComments = allComments.length;
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
