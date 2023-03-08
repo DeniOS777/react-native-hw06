@@ -18,7 +18,7 @@ import { db } from '../../firebase/config';
 
 import { styles } from './CommentsScreen.styled';
 
-const dummyUrl = 'https://via.placeholder.com/28x28';
+const dummyUrl = 'https://dummyimage.com/28x28/0e8488/0E8388.jpg';
 
 const Item = ({ item }) => (
   <View style={styles.itemComments}>

@@ -44,7 +44,7 @@ export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const { login, email } = useSelector(state => state.auth);
 
-  const getAllPosts = async () => {
+  const getAllPosts = () => {
     onSnapshot(collection(db, 'posts'), data =>
       setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
     );
