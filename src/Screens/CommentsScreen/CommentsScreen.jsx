@@ -38,8 +38,12 @@ export const CommentsScreen = ({ route }) => {
   const { login } = useSelector(state => state.auth);
   const [comment, setComment] = useState('');
   const [allComments, setAllComments] = useState([]);
+  const [isFocus, setIsFocus] = useState(false);
 
   const handleInput = text => setComment(text);
+
+  const handleFocus = () => setIsFocus(true);
+  const handleBlur = () => setIsFocus(false);
 
   const uploadCommentToServer = async () => {
     const postsRef = collection(db, 'posts');
@@ -74,10 +78,17 @@ export const CommentsScreen = ({ route }) => {
       >
         <View style={styles.container}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: photo }} style={styles.image} />
+            <Image
+              source={{ uri: photo }}
+              style={{
+                ...styles.image,
+                width: isFocus ? 300 : '100%',
+                height: isFocus ? 140 : 220,
+              }}
+            />
           </View>
 
-          <View style={{ height: 210 }}>
+          <View style={{ height: isFocus ? 70 : 240, marginBottom: 20 }}>
             <FlatList
               data={allComments}
               renderItem={({ item }) => <Item item={item} />}
@@ -87,8 +98,8 @@ export const CommentsScreen = ({ route }) => {
 
           <View style={styles.inputWrap}>
             <TextInput
-              onFocus={null}
-              onBlur={null}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               onChangeText={handleInput}
               value={comment}
               keyboardType="default"

@@ -31,7 +31,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState('');
   const [title, setTitle] = useState('');
   const [place, setPlace] = useState('');
-  const [isFocus, setIsFocus] = useState(true);
+  const [isFocus, setIsFocus] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +42,9 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const handleTitle = text => setTitle(text);
   const handlePlace = text => setPlace(text);
-  const handleFocus = () => setIsFocus(false);
+
+  const handleFocus = () => setIsFocus(true);
+  const handleBlur = () => setIsFocus(false);
 
   const makePhoto = async () => {
     const { uri } = await cameraRef.takePictureAsync();
@@ -94,31 +96,56 @@ export const CreatePostsScreen = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {isFocused ? (
-            <Camera ref={setCameraRef} type={type} style={styles.camera}>
-              {photo && <Image source={{ uri: photo }} style={styles.image} />}
+            <Camera
+              ref={setCameraRef}
+              type={type}
+              style={{ ...styles.camera, height: isFocus ? 140 : 240 }}
+            >
+              {photo && (
+                <Image
+                  source={{ uri: photo }}
+                  style={{ ...styles.image, height: isFocus ? 120 : 200 }}
+                />
+              )}
               <TouchableOpacity
                 onPress={makePhoto}
                 activeOpacity={0.8}
-                style={styles.addPhotoButton}
+                style={{
+                  ...styles.addPhotoButton,
+                  backgroundColor: photo
+                    ? 'rgba(255, 255, 255, 0.3);'
+                    : '#ffffff',
+                }}
               >
-                <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
+                <MaterialIcons
+                  name="photo-camera"
+                  size={24}
+                  color={photo ? '#ffffff' : '#BDBDBD'}
+                />
               </TouchableOpacity>
             </Camera>
           ) : null}
-          <Text style={styles.downloadTitle}>Загрузите фото</Text>
+          <Text style={styles.downloadTitle}>
+            {photo ? 'Редактировать фото' : 'Загрузите фото'}
+          </Text>
 
-          <View style={{ paddingBottom: isFocus ? 100 : 20 }}>
+          <View>
             <TextInput
               onChangeText={handleTitle}
               onFocus={handleFocus}
+              onBlur={handleBlur}
               value={title}
+              maxLength={25}
               placeholder="Название..."
               placeholderTextColor="#BDBDBD"
               style={styles.inputTitle}
             />
             <TextInput
               onChangeText={handlePlace}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               value={place}
+              maxLength={30}
               placeholder="Местность..."
               placeholderTextColor="#BDBDBD"
               style={styles.inputLocation}

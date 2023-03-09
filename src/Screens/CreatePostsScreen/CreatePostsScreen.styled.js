@@ -10,15 +10,15 @@ export const styles = StyleSheet.create({
   camera: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 240,
     marginBottom: 8,
     borderRadius: 8,
     overflow: 'hidden',
+    transitionProperty: 'height',
+    transitionDuration: 300,
   },
   image: {
-    // width: '100%',
-    width: 200,
-    height: 120,
+    width: 300,
+    height: 200,
     borderRadius: 8,
   },
   addPhotoButton: {

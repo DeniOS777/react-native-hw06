@@ -4,25 +4,21 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 32,
-    paddingBottom: 16,
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
   },
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 20,
   },
   image: {
-    width: '100%',
-    height: 220,
     borderRadius: 8,
     marginBottom: 8,
   },
   inputWrap: {
     position: 'relative',
     justifyContent: 'center',
-    marginTop: 'auto',
   },
   input: {
     paddingLeft: 16,
