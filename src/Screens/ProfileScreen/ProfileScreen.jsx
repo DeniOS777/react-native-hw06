@@ -6,7 +6,6 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
 } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
@@ -74,8 +73,6 @@ export const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     getPostsCurrentUser();
   }, []);
-
-  console.log(userPosts);
 
   return (
     <View style={styles.container}>

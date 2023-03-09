@@ -3,6 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
   TextInput,
   ImageBackground,
   KeyboardAvoidingView,
@@ -10,12 +11,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { authSignUpUser } from '../../redux/auth/authOperations';
 import { useDispatch } from 'react-redux';
 
 import { styles } from './RegistrationScreen.styled';
 
 const imagePath = require('../../../assets/images/bg-photo.png');
+const avatar = require('../../../assets/userPhoto.jpg');
 
 export const RegistrationScreen = ({ navigation }) => {
   const [login, setLogin] = useState('');
@@ -90,21 +93,19 @@ export const RegistrationScreen = ({ navigation }) => {
                 marginBottom: isSpaceKeyboard ? -173 : 0,
               }}
             >
-              <Text style={styles.title}>Регистрация</Text>
-
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -60,
-                  alignSelf: 'center',
-                  width: 120,
-                  height: 120,
-                  backgroundColor: '#F6F6F6',
-                  borderRadius: 16,
-                }}
-              >
-                <TextInput />
+              <View style={styles.containerAvatar}>
+                <Image source={avatar} alt="user photo" style={styles.avatar} />
               </View>
+
+              <TouchableOpacity
+                onPress={null}
+                activeOpacity={0.5}
+                style={styles.btnDeleteAvatar}
+              >
+                <Feather name="plus-circle" size={24} color="#FF6C00" />
+              </TouchableOpacity>
+
+              <Text style={styles.title}>Регистрация</Text>
 
               <TextInput
                 onFocus={handleFocusLogin}
