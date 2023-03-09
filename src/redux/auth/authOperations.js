@@ -53,12 +53,14 @@ export const authChangeStateUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       onAuthStateChanged(auth, user => {
-        const dataToUpdate = {
-          login: user.displayName,
-          email: user.email,
-          userId: user.uid,
-        };
-        thunkAPI.dispatch(authRefreshUser(dataToUpdate));
+        if (user) {
+          const dataToUpdate = {
+            login: user.displayName,
+            email: user.email,
+            userId: user.uid,
+          };
+          thunkAPI.dispatch(authRefreshUser(dataToUpdate));
+        }
       });
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

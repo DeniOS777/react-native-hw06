@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -19,6 +20,7 @@ import { authSignOutUser } from '../../redux/auth/authOperations';
 import { styles } from './ProfileScreen.styled';
 
 const imagePath = require('../../../assets/images/bg-photo.png');
+const avatar = require('../../../assets/userPhoto.jpg');
 
 const Item = ({ item, navigation }) => (
   <View style={{ marginBottom: 32 }}>
@@ -78,33 +80,37 @@ export const ProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ImageBackground source={imagePath} style={styles.image}>
-        <ScrollView style={{ paddingTop: 120 }}>
-          <SafeAreaView style={{ position: 'relative' }}>
-            <View style={styles.containerAvatar}></View>
-            <TouchableOpacity
-              onPress={() => dispatch(authSignOutUser())}
-              activeOpacity={0.6}
-              style={styles.btnLogOut}
-            >
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-            <FlatList
-              ListHeaderComponent={<ListTitle title={login} />}
-              style={{
-                backgroundColor: '#fff',
-                paddingHorizontal: 16,
-                paddingTop: 90,
-                borderTopLeftRadius: 25,
-                borderTopRightRadius: 25,
-                paddingBottom: 120,
-              }}
-              data={userPosts}
-              renderItem={({ item }) => (
-                <Item navigation={navigation} item={item} />
-              )}
-              keyExtractor={item => item.id}
-            />
-          </SafeAreaView>
+        <ScrollView style={{ paddingTop: 120, position: 'relative' }}>
+          <View style={styles.containerAvatar}>
+            <Image source={avatar} style={styles.avatar} />
+          </View>
+
+          <TouchableOpacity
+            onPress={null}
+            activeOpacity={0.5}
+            style={styles.btnDeleteAvatar}
+          >
+            <Feather name="plus-circle" size={24} color="#E8E8E8" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => dispatch(authSignOutUser())}
+            activeOpacity={0.6}
+            style={styles.btnLogOut}
+          >
+            <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+          </TouchableOpacity>
+
+          <FlatList
+            scrollEnabled={false}
+            ListHeaderComponent={<ListTitle title={login} />}
+            style={styles.postsList}
+            data={userPosts}
+            renderItem={({ item }) => (
+              <Item navigation={navigation} item={item} />
+            )}
+            keyExtractor={item => item.id}
+          />
         </ScrollView>
       </ImageBackground>
     </View>
