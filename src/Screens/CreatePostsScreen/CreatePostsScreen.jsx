@@ -4,6 +4,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -32,6 +33,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [place, setPlace] = useState('');
   const [isFocus, setIsFocus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -47,8 +49,10 @@ export const CreatePostsScreen = ({ navigation }) => {
   const handleBlur = () => setIsFocus(false);
 
   const makePhoto = async () => {
-    const { uri } = await cameraRef.takePictureAsync();
-    setPhoto(uri);
+    try {
+      const { uri } = await cameraRef.takePictureAsync();
+      setPhoto(uri);
+    } catch (error) {}
   };
 
   const isPostReady = () => {
@@ -57,35 +61,40 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const uploadPhotoToStorage = async () => {
-    const response = await fetch(photo);
-    const file = await response.blob();
-    const photoId = uuid.v4();
-    const storageRef = ref(storage, `postImage/${photoId}`);
-    await uploadBytes(storageRef, file);
-
-    return await getDownloadURL(ref(storage, `postImage/${photoId}`));
+    try {
+      const response = await fetch(photo);
+      const file = await response.blob();
+      const photoId = uuid.v4();
+      const storageRef = ref(storage, `postImage/${photoId}`);
+      await uploadBytes(storageRef, file);
+      return await getDownloadURL(ref(storage, `postImage/${photoId}`));
+    } catch (error) {}
   };
 
   const uploadPostToServer = async () => {
     if (!isPostReady()) return;
-    const response = await Location.getCurrentPositionAsync({});
-    const location = {
-      longitude: response.coords.longitude,
-      latitude: response.coords.latitude,
-    };
-    const photoFromStorage = await uploadPhotoToStorage();
-    await addDoc(collection(db, 'posts'), {
-      userId,
-      login,
-      photo: photoFromStorage,
-      title,
-      place,
-      location,
-    });
-    navigation.navigate('Posts');
-    setPhoto('');
-    setTitle('');
-    setPlace('');
+    try {
+      setIsLoading(true);
+      const response = await Location.getCurrentPositionAsync({});
+      const location = {
+        longitude: response.coords.longitude,
+        latitude: response.coords.latitude,
+      };
+      const photoFromStorage = await uploadPhotoToStorage();
+      await addDoc(collection(db, 'posts'), {
+        userId,
+        login,
+        photo: photoFromStorage,
+        title,
+        place,
+        location,
+      });
+      setIsLoading(false);
+      navigation.navigate('Posts');
+      setPhoto('');
+      setTitle('');
+      setPlace('');
+    } catch (error) {}
   };
 
   return (
@@ -151,6 +160,7 @@ export const CreatePostsScreen = ({ navigation }) => {
               style={styles.inputLocation}
             />
             <TouchableOpacity
+              disabled={isLoading ? true : false}
               onPress={uploadPostToServer}
               activeOpacity={0.8}
               style={{
@@ -158,14 +168,18 @@ export const CreatePostsScreen = ({ navigation }) => {
                 backgroundColor: isPostReady() ? '#FF6C00' : '#F6F6F6',
               }}
             >
-              <Text
-                style={{
-                  ...styles.buttonText,
-                  color: isPostReady() ? '#ffffff' : '#BDBDBD',
-                }}
-              >
-                Опубликовать
-              </Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text
+                  style={{
+                    ...styles.buttonText,
+                    color: isPostReady() ? '#ffffff' : '#BDBDBD',
+                  }}
+                >
+                  Опубликовать
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

@@ -57,6 +57,8 @@ export const styles = StyleSheet.create({
   button: {
     paddingVertical: 16,
     borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontFamily: 'Roboto-Regular',
