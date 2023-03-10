@@ -93,6 +93,7 @@ export const styles = StyleSheet.create({
     paddingTop: 90,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingBottom: 120,
+    paddingBottom: 130,
+    minHeight: 750,
   },
 });

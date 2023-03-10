@@ -12,7 +12,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { authSignOutUser } from '../../redux/auth/authOperations';
 
@@ -64,9 +64,8 @@ export const ProfileScreen = ({ navigation }) => {
 
   const getPostsCurrentUser = async () => {
     const q = query(collection(db, 'posts'), where('userId', '==', userId));
-    const querySnapshot = await getDocs(q);
-    setUserPosts(
-      querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    onSnapshot(q, data =>
+      setUserPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
     );
   };
 

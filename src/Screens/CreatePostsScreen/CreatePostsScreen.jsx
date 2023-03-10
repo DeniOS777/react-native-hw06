@@ -14,10 +14,10 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
-import { nanoid } from 'nanoid';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
+import uuid from 'react-native-uuid';
 
 import { storage, db } from '../../firebase/config';
 
@@ -59,7 +59,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const uploadPhotoToStorage = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
-    const photoId = nanoid();
+    const photoId = uuid.v4();
     const storageRef = ref(storage, `postImage/${photoId}`);
     await uploadBytes(storageRef, file);
 
