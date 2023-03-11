@@ -5,7 +5,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  useNavigation,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
 import { RegistrationScreen } from '../screens/RegistrationScreen';
@@ -21,8 +24,10 @@ const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const HomeTab = ({ navigation }) => {
+const HomeTab = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  const tab = getFocusedRouteNameFromRoute(route);
+  console.log('TAB', tab);
 
   return (
     <Tab.Navigator
@@ -39,6 +44,7 @@ const HomeTab = ({ navigation }) => {
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           tabBarIconStyle: { marginLeft: 45 },
           tabBarStyle: { height: 83, paddingBottom: 10, borderTopWidth: 1 },
+          tabBarItemStyle: { opacity: tab === 'Create' ? 0 : 1 },
           headerRight: () => (
             <TouchableOpacity
               onPress={() => dispatch(authSignOutUser())}
@@ -96,6 +102,7 @@ const HomeTab = ({ navigation }) => {
         options={{
           headerShown: false,
           tabBarIconStyle: { marginRight: 45 },
+          tabBarItemStyle: { opacity: tab === 'Create' ? 0 : 1 },
           tabBarStyle: { height: 83, paddingBottom: 10, borderTopWidth: 1 },
           tabBarIcon: ({ focused, size, color }) =>
             focused ? (

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  Alert,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
@@ -42,6 +43,15 @@ export const CreatePostsScreen = ({ navigation }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!isFocused) {
+      setPhoto('');
+      setPlace('');
+      setTitle('');
+      setIsLoading(false);
+    }
+  }, [isFocused]);
+
   const handleTitle = text => setTitle(text);
   const handlePlace = text => setPlace(text);
 
@@ -55,10 +65,19 @@ export const CreatePostsScreen = ({ navigation }) => {
     } catch (error) {}
   };
 
+  const deleteMakePhoto = () => setPhoto('');
+
   const isPostReady = () => {
     if (!photo || !title || !place) return false;
     return true;
   };
+
+  const notificationPopUp = () =>
+    Alert.alert(
+      'Notification',
+      'Please fill in all fields and make a photo to send the post.',
+      [{ text: 'OK', onPress: () => null }]
+    );
 
   const uploadPhotoToStorage = async () => {
     try {
@@ -72,7 +91,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const uploadPostToServer = async () => {
-    if (!isPostReady()) return;
+    if (!isPostReady()) return notificationPopUp();
     try {
       setIsLoading(true);
       const response = await Location.getCurrentPositionAsync({});
@@ -134,9 +153,18 @@ export const CreatePostsScreen = ({ navigation }) => {
               </TouchableOpacity>
             </Camera>
           ) : null}
-          <Text style={styles.downloadTitle}>
-            {photo ? 'Редактировать фото' : 'Загрузите фото'}
-          </Text>
+
+          {photo ? (
+            <TouchableOpacity
+              onPress={deleteMakePhoto}
+              activeOpacity={0.5}
+              style={{ marginBottom: 22 }}
+            >
+              <Text style={styles.deletePhoto}>Удалить фото</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.downloadTitle}>Загрузите фото</Text>
+          )}
 
           <View>
             <TextInput

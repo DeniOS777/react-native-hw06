@@ -37,6 +37,12 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
     color: '#BDBDBD',
   },
+  deletePhoto: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+    color: '#dc143c',
+  },
   inputTitle: {
     height: 50,
     fontFamily: 'Roboto-Regular',
