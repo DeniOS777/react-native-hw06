@@ -33,16 +33,21 @@ export const styles = StyleSheet.create({
   containerControls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 16,
   },
   downloadTitle: {
-    marginBottom: 22,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
     color: '#BDBDBD',
   },
+  btnChangeCameraType: {
+    backgroundColor: '#808080',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
   flipCameraTitle: {
-    marginBottom: 22,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,

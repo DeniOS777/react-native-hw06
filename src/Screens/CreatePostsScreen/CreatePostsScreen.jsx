@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
@@ -159,18 +160,22 @@ export const CreatePostsScreen = ({ navigation }) => {
 
           <View style={styles.containerControls}>
             {photo ? (
-              <TouchableOpacity
-                onPress={deleteMadePhoto}
-                activeOpacity={0.5}
-                style={{ marginBottom: 22 }}
-              >
+              <TouchableOpacity onPress={deleteMadePhoto} activeOpacity={0.5}>
                 <Text style={styles.deletePhoto}>Удалить фото</Text>
               </TouchableOpacity>
             ) : (
               <Text style={styles.downloadTitle}>Загрузите фото</Text>
             )}
-            <TouchableOpacity onPress={changeCameraType} activeOpacity={0.5}>
-              <Text style={styles.flipCameraTitle}>Flip</Text>
+            <TouchableOpacity
+              onPress={changeCameraType}
+              activeOpacity={0.5}
+              style={styles.btnChangeCameraType}
+            >
+              <Ionicons
+                name="camera-reverse"
+                size={24}
+                color={type === 'back' ? '#000000' : '#ffffff'}
+              />
             </TouchableOpacity>
           </View>
 
