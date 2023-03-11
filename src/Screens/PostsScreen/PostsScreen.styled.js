@@ -22,14 +22,14 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
   },
   textName: {
-    marginBottom: 4,
-    fontSize: 13,
+    marginBottom: 8,
+    fontSize: 14,
     fontWeight: '700',
     lineHeight: 15,
     color: '#212121',
   },
   textEmail: {
-    fontSize: 13,
+    fontSize: 14,
     lineHeight: 13,
     color: 'rgba(33, 33, 33, 0.8)',
   },

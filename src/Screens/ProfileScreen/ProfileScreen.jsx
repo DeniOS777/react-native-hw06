@@ -94,7 +94,7 @@ export const ProfileScreen = ({ navigation }) => {
             activeOpacity={0.6}
             style={styles.btnLogOut}
           >
-            <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+            <MaterialIcons name="logout" size={24} color="#b22222" />
           </TouchableOpacity>
 
           <FlatList

@@ -65,7 +65,7 @@ export const CreatePostsScreen = ({ navigation }) => {
     } catch (error) {}
   };
 
-  const deleteMakePhoto = () => setPhoto('');
+  const deleteMadePhoto = () => setPhoto('');
 
   const isPostReady = () => {
     if (!photo || !title || !place) return false;
@@ -78,6 +78,9 @@ export const CreatePostsScreen = ({ navigation }) => {
       'Please fill in all fields and make a photo to send the post.',
       [{ text: 'OK', onPress: () => null }]
     );
+
+  const changeCameraType = () =>
+    type === 'back' ? setType(CameraType.front) : setType(CameraType.back);
 
   const uploadPhotoToStorage = async () => {
     try {
@@ -154,17 +157,22 @@ export const CreatePostsScreen = ({ navigation }) => {
             </Camera>
           ) : null}
 
-          {photo ? (
-            <TouchableOpacity
-              onPress={deleteMakePhoto}
-              activeOpacity={0.5}
-              style={{ marginBottom: 22 }}
-            >
-              <Text style={styles.deletePhoto}>Удалить фото</Text>
+          <View style={styles.containerControls}>
+            {photo ? (
+              <TouchableOpacity
+                onPress={deleteMadePhoto}
+                activeOpacity={0.5}
+                style={{ marginBottom: 22 }}
+              >
+                <Text style={styles.deletePhoto}>Удалить фото</Text>
+              </TouchableOpacity>
+            ) : (
+              <Text style={styles.downloadTitle}>Загрузите фото</Text>
+            )}
+            <TouchableOpacity onPress={changeCameraType} activeOpacity={0.5}>
+              <Text style={styles.flipCameraTitle}>Flip</Text>
             </TouchableOpacity>
-          ) : (
-            <Text style={styles.downloadTitle}>Загрузите фото</Text>
-          )}
+          </View>
 
           <View>
             <TextInput

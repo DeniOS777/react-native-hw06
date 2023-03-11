@@ -26,8 +26,7 @@ const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const tab = getFocusedRouteNameFromRoute(route);
-  console.log('TAB', tab);
+  const isActiveTab = getFocusedRouteNameFromRoute(route);
 
   return (
     <Tab.Navigator
@@ -40,18 +39,22 @@ const HomeTab = ({ navigation, route }) => {
         options={({ route }) => ({
           title: 'Публикации',
           headerTitleAlign: 'center',
-          headerStyle: { borderBottomWidth: 1 },
+          headerStyle: {
+            borderBottomWidth: 1,
+            borderBottomColor: '#696969',
+            backgroundColor: '#808080',
+          },
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           tabBarIconStyle: { marginLeft: 45 },
-          tabBarStyle: { height: 83, paddingBottom: 10, borderTopWidth: 1 },
-          tabBarItemStyle: { opacity: tab === 'Create' ? 0 : 1 },
+          tabBarStyle: { height: 82, borderTopWidth: 1 },
+          tabBarItemStyle: { height: isActiveTab === 'Create' ? 0 : 82 },
           headerRight: () => (
             <TouchableOpacity
               onPress={() => dispatch(authSignOutUser())}
               activeOpacity={0.6}
               style={{ paddingRight: 16 }}
             >
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+              <MaterialIcons name="logout" size={24} color="#b22222" />
             </TouchableOpacity>
           ),
           tabBarIcon: ({ focused, size, color }) =>
@@ -71,12 +74,12 @@ const HomeTab = ({ navigation, route }) => {
           title: 'Создать публикацию',
           headerTitleAlign: 'center',
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
-          headerStyle: { borderBottomWidth: 1 },
-          tabBarStyle: {
-            height: 83,
-            paddingBottom: 10,
-            borderTopColor: 'transparent',
+          headerStyle: {
+            borderBottomWidth: 1,
+            borderBottomColor: '#696969',
+            backgroundColor: '#808080',
           },
+          tabBarStyle: { height: 82, borderTopColor: 'transparent' },
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate('Posts')}
@@ -102,8 +105,8 @@ const HomeTab = ({ navigation, route }) => {
         options={{
           headerShown: false,
           tabBarIconStyle: { marginRight: 45 },
-          tabBarItemStyle: { opacity: tab === 'Create' ? 0 : 1 },
-          tabBarStyle: { height: 83, paddingBottom: 10, borderTopWidth: 1 },
+          tabBarStyle: { height: 82, borderTopWidth: 1 },
+          tabBarItemStyle: { height: isActiveTab === 'Create' ? 0 : 82 },
           tabBarIcon: ({ focused, size, color }) =>
             focused ? (
               <View style={styles.buttonProfile}>

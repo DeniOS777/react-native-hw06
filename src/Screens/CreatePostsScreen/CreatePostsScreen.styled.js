@@ -30,7 +30,18 @@ export const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 50,
   },
+  containerControls: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   downloadTitle: {
+    marginBottom: 22,
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+    color: '#BDBDBD',
+  },
+  flipCameraTitle: {
     marginBottom: 22,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
