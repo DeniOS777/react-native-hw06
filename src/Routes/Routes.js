@@ -152,6 +152,11 @@ export const chooseNavigation = isLogedIn => {
           title: 'Комментарии',
           headerTitleAlign: 'center',
           headerBackTitleVisible: false,
+          headerStyle: {
+            borderBottomWidth: 1,
+            borderBottomColor: '#696969',
+            backgroundColor: '#808080',
+          },
           headerLeft: () => {
             const navigation = useNavigation();
             return (
@@ -172,6 +177,11 @@ export const chooseNavigation = isLogedIn => {
         options={{
           title: 'Карта',
           headerBackTitleVisible: false,
+          headerStyle: {
+            borderBottomWidth: 1,
+            borderBottomColor: '#696969',
+            backgroundColor: '#808080',
+          },
           headerLeft: () => {
             const navigation = useNavigation();
             return (

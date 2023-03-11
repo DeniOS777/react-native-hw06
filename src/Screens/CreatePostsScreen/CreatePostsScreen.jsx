@@ -136,7 +136,7 @@ export const CreatePostsScreen = ({ navigation }) => {
               {photo && (
                 <Image
                   source={{ uri: photo }}
-                  style={{ ...styles.image, height: isFocus ? 120 : 200 }}
+                  style={{ ...styles.image, height: isFocus ? 140 : 240 }}
                 />
               )}
               <TouchableOpacity

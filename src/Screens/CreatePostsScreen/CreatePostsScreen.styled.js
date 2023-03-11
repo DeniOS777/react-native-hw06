@@ -13,12 +13,9 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     overflow: 'hidden',
-    transitionProperty: 'height',
-    transitionDuration: 300,
   },
   image: {
-    width: 300,
-    height: 200,
+    width: '100%',
     borderRadius: 8,
   },
   addPhotoButton: {
@@ -44,7 +41,8 @@ export const styles = StyleSheet.create({
   btnChangeCameraType: {
     backgroundColor: '#808080',
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    borderWidth: 2,
+    borderColor: '#FF6C00',
     borderRadius: 4,
   },
   flipCameraTitle: {

@@ -96,4 +96,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 130,
     minHeight: 750,
   },
+  wrapTitleAndDelete: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
 });

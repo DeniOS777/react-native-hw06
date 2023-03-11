@@ -12,7 +12,14 @@ import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { authSignOutUser } from '../../redux/auth/authOperations';
 
@@ -21,38 +28,55 @@ import { styles } from './ProfileScreen.styled';
 const imagePath = require('../../../assets/images/bg-photo.png');
 const avatar = require('../../../assets/userPhoto.jpg');
 
-const Item = ({ item, navigation }) => (
-  <View style={{ marginBottom: 32 }}>
-    <Image style={styles.imagePosts} source={{ uri: `${item.photo}` }} />
-    <Text style={styles.imageTitle}>{item.title}</Text>
-    <View style={styles.descriptionContainer}>
-      <View style={styles.wrapContainer}>
+const Item = ({ item, navigation }) => {
+  const deletePost = async postId => {
+    try {
+      await deleteDoc(doc(db, 'posts', `${postId}`));
+    } catch (error) {}
+  };
+
+  return (
+    <View style={{ marginBottom: 32 }}>
+      <Image style={styles.imagePosts} source={{ uri: `${item.photo}` }} />
+      <View style={styles.wrapTitleAndDelete}>
+        <Text style={styles.imageTitle}>{item.title}</Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() =>
-            navigation.navigate('Comments', {
-              photo: item.photo,
-              postId: item.id,
-            })
-          }
+          onPress={() => deletePost(item.id)}
         >
-          <EvilIcons name="comment" size={24} color="#BDBDBD" />
+          <Feather name="trash-2" size={24} color="red" />
         </TouchableOpacity>
-        <Text style={styles.textComment}>1</Text>
       </View>
 
-      <View style={styles.wrapContainer}>
-        <EvilIcons name="location" size={24} color="#BDBDBD" />
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Map', { ...item.location })}
-          activeOpacity={0.5}
-        >
-          <Text style={styles.textPlace}>{item.place}</Text>
-        </TouchableOpacity>
+      <View style={styles.descriptionContainer}>
+        <View style={styles.wrapContainer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() =>
+              navigation.navigate('Comments', {
+                photo: item.photo,
+                postId: item.id,
+              })
+            }
+          >
+            <EvilIcons name="comment" size={24} color="#BDBDBD" />
+          </TouchableOpacity>
+          <Text style={styles.textComment}>1</Text>
+        </View>
+
+        <View style={styles.wrapContainer}>
+          <EvilIcons name="location" size={24} color="#BDBDBD" />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Map', { ...item.location })}
+            activeOpacity={0.5}
+          >
+            <Text style={styles.textPlace}>{item.place}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 const ListTitle = ({ title }) => <Text style={styles.listTitle}>{title}</Text>;
 

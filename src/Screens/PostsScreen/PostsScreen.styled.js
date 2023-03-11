@@ -39,8 +39,13 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
-  imageTitle: {
+  wrapTitleAndDelete: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
+  },
+  imageTitle: {
     fontFamily: 'Roboto-Medium',
     fontSize: 16,
     lineHeight: 19,
