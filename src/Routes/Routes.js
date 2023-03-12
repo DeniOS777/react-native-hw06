@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import {
   useNavigation,
@@ -41,8 +42,8 @@ const HomeTab = ({ navigation, route }) => {
           headerTitleAlign: 'center',
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#696969',
-            backgroundColor: '#808080',
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           tabBarIconStyle: { marginLeft: 45 },
@@ -76,8 +77,8 @@ const HomeTab = ({ navigation, route }) => {
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#696969',
-            backgroundColor: '#808080',
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           tabBarStyle: { height: 82, borderTopColor: 'transparent' },
           headerLeft: () => (
@@ -86,7 +87,7 @@ const HomeTab = ({ navigation, route }) => {
               activeOpacity={0.6}
               style={{ paddingLeft: 16 }}
             >
-              <Feather name="arrow-left" size={24} color="#BDBDBD" />
+              <SimpleLineIcons name="arrow-left" size={18} color="#4169e1" />
             </TouchableOpacity>
           ),
           tabBarIcon: ({ focused, size, color }) =>
@@ -154,8 +155,8 @@ export const chooseNavigation = isLogedIn => {
           headerBackTitleVisible: false,
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#696969',
-            backgroundColor: '#808080',
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerLeft: () => {
             const navigation = useNavigation();
@@ -165,7 +166,7 @@ export const chooseNavigation = isLogedIn => {
                 activeOpacity={0.6}
                 style={{ paddingLeft: 16 }}
               >
-                <Feather name="arrow-left" size={24} color="#BDBDBD" />
+                <SimpleLineIcons name="arrow-left" size={18} color="#4169e1" />
               </TouchableOpacity>
             );
           },
@@ -179,8 +180,8 @@ export const chooseNavigation = isLogedIn => {
           headerBackTitleVisible: false,
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#696969',
-            backgroundColor: '#808080',
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerLeft: () => {
             const navigation = useNavigation();
@@ -190,7 +191,7 @@ export const chooseNavigation = isLogedIn => {
                 activeOpacity={0.6}
                 style={{ paddingLeft: 16 }}
               >
-                <Feather name="arrow-left" size={24} color="#BDBDBD" />
+                <SimpleLineIcons name="arrow-left" size={18} color="#4169e1" />
               </TouchableOpacity>
             );
           },

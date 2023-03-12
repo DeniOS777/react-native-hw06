@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   form: {
     paddingHorizontal: 16,
     paddingTop: 32,
-    paddingBottom: 144,
+    paddingBottom: 40,
     backgroundColor: '#fff',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -48,6 +48,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 43,
+    marginBottom: 16,
     paddingVertical: 16,
     backgroundColor: '#FF6C00',
     borderRadius: 100,
@@ -65,16 +66,22 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
     color: '#ffffff',
   },
-  buttonRedirect: {
-    alignSelf: 'center',
-    marginTop: 16,
-    width: 270,
-  },
-  redirectTitle: {
+  text: {
+    marginRight: 4,
     fontFamily: 'Roboto-Regular',
     textAlign: 'center',
     fontSize: 16,
     lineHeight: 19,
-    color: '#1B4371',
+  },
+  redirecLinkTitle: {
+    fontFamily: 'Roboto-Regular',
+    textAlign: 'center',
+    fontSize: 16,
+    lineHeight: 19,
+    color: '#000080',
+  },
+  wrapTextAndLink: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });

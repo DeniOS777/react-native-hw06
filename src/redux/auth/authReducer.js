@@ -12,22 +12,31 @@ export const authSlice = createSlice({
     userId: null,
     login: null,
     email: null,
+    isLoading: false,
     isLogedIn: false,
   },
   reducers: {},
   extraReducers: builder => {
     builder
+      .addCase(authSignUpUser.pending, state => {
+        state.isLoading = true;
+      })
       .addCase(authSignUpUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
         state.isLogedIn = true;
+        state.isLoading = false;
+      })
+      .addCase(authSignInUser.pending, state => {
+        state.isLoading = true;
       })
       .addCase(authSignInUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
         state.isLogedIn = true;
+        state.isLoading = false;
       })
       .addCase(authRefreshUser, (state, { payload }) => {
         state.userId = payload.userId;

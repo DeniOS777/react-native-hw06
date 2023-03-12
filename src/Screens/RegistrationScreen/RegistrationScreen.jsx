@@ -5,15 +5,17 @@ import {
   View,
   Image,
   TextInput,
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
+  ActivityIndicator,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { authSignUpUser } from '../../redux/auth/authOperations';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { styles } from './RegistrationScreen.styled';
 
@@ -31,13 +33,20 @@ export const RegistrationScreen = ({ navigation }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const dispatch = useDispatch();
+  const { isLoading } = useSelector(state => state.auth);
 
   const handleLogin = text => setLogin(text);
   const handleEmail = text => setEmail(text);
-  const handlePassword = text => {
+
+  const handleShowPassword = text => {
     if (!text) setIsShowPassword(false);
     setPassword(text);
   };
+
+  const notificationPopUp = () =>
+    Alert.alert('Notification', 'Please, fill in all fields to register', [
+      { text: 'OK', onPress: () => null },
+    ]);
 
   const handleFocusLogin = () => {
     setFocusedLogin(true);
@@ -72,7 +81,7 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    if (!login || !email || !password) return;
+    if (!login || !email || !password) return notificationPopUp();
     dispatch(authSignUpUser({ login, email, password }));
     setLogin('');
     setEmail('');
@@ -90,7 +99,7 @@ export const RegistrationScreen = ({ navigation }) => {
             <View
               style={{
                 ...styles.form,
-                marginBottom: isSpaceKeyboard ? -173 : 0,
+                marginBottom: isSpaceKeyboard ? -30 : 0,
               }}
             >
               <View style={styles.containerAvatar}>
@@ -141,7 +150,7 @@ export const RegistrationScreen = ({ navigation }) => {
                 <TextInput
                   onFocus={handleFocusPassword}
                   onBlur={handleBlurPassword}
-                  onChangeText={handlePassword}
+                  onChangeText={handleShowPassword}
                   maxLength={23}
                   value={password}
                   keyboardType="default"
@@ -160,7 +169,7 @@ export const RegistrationScreen = ({ navigation }) => {
                   activeOpacity={0.8}
                   style={styles.buttonShowPassword}
                 >
-                  <Text style={{ ...styles.buttonTitle, color: '#1B4371' }}>
+                  <Text style={{ ...styles.buttonTitle, color: '#000080' }}>
                     Показать
                   </Text>
                 </TouchableOpacity>
@@ -171,18 +180,22 @@ export const RegistrationScreen = ({ navigation }) => {
                 activeOpacity={0.8}
                 style={styles.button}
               >
-                <Text style={styles.buttonTitle}>Зарегистрироваться</Text>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <Text style={styles.buttonTitle}>Зарегистрироваться</Text>
+                )}
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
-                activeOpacity={0.6}
-                style={styles.buttonRedirect}
-              >
-                <Text style={styles.redirectTitle}>
-                  Уже есть аккаунт? Войти
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.wrapTextAndLink}>
+                <Text style={styles.text}>Уже есть аккаунт?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Login')}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.redirectLinkTitle}>Войти</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>

@@ -44,7 +44,7 @@ const Item = ({ item, navigation }) => {
           activeOpacity={0.5}
           onPress={() => deletePost(item.id)}
         >
-          <Feather name="trash-2" size={24} color="red" />
+          <Feather name="trash-2" size={24} color="#b22222" />
         </TouchableOpacity>
       </View>
 

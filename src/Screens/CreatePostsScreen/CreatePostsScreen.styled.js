@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   containerControls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   downloadTitle: {
     fontFamily: 'Roboto-Regular',
@@ -39,9 +39,9 @@ export const styles = StyleSheet.create({
     color: '#BDBDBD',
   },
   btnChangeCameraType: {
-    backgroundColor: '#808080',
+    backgroundColor: '#dcdcdc',
     paddingHorizontal: 8,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#FF6C00',
     borderRadius: 4,
   },

@@ -4,14 +4,16 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
+  ActivityIndicator,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 import { authSignInUser } from '../../redux/auth/authOperations';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { styles } from './LoginScreen.styled';
 
@@ -26,12 +28,18 @@ export const LoginScreen = ({ navigation }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const dispatch = useDispatch();
+  const { isLoading } = useSelector(state => state.auth);
 
   const handleEmail = text => setEmail(text);
   const handlePassword = text => {
     if (!text) setIsShowPassword(false);
     setPassword(text);
   };
+
+  const notificationPopUp = () =>
+    Alert.alert('Notification', 'Please, fill in all fields to login', [
+      { text: 'OK', onPress: () => null },
+    ]);
 
   const handleFocusEmail = () => {
     setFocusedEmail(true);
@@ -57,7 +65,7 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    if (!email || !password) return;
+    if (!email || !password) return notificationPopUp();
     dispatch(authSignInUser({ email, password }));
     setEmail('');
     setPassword('');
@@ -74,7 +82,7 @@ export const LoginScreen = ({ navigation }) => {
             <View
               style={{
                 ...styles.form,
-                marginBottom: isSpaceKeyboard ? -239 : 0,
+                marginBottom: isSpaceKeyboard ? -20 : 0,
               }}
             >
               <Text style={styles.title}>Войти</Text>
@@ -116,7 +124,7 @@ export const LoginScreen = ({ navigation }) => {
                   activeOpacity={0.8}
                   style={styles.buttonShowPassword}
                 >
-                  <Text style={{ ...styles.buttonTitle, color: '#1B4371' }}>
+                  <Text style={{ ...styles.buttonTitle, color: '#000080' }}>
                     Показать
                   </Text>
                 </TouchableOpacity>
@@ -127,18 +135,24 @@ export const LoginScreen = ({ navigation }) => {
                 activeOpacity={0.8}
                 style={styles.button}
               >
-                <Text style={styles.buttonTitle}>Войти</Text>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <Text style={styles.buttonTitle}>Войти</Text>
+                )}
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Registration')}
-                style={styles.buttonRedirect}
-                activeOpacity={0.6}
-              >
-                <Text style={styles.redirectTitle}>
-                  Нет аккаунта? Зарегистрироваться
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.wrapTextAndLink}>
+                <Text style={styles.text}>Нет аккаунта?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Registration')}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.redirecLinkTitle}>
+                    Зарегистрироваться
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>

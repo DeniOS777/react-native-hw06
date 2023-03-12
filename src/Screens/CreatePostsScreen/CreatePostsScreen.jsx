@@ -173,7 +173,7 @@ export const CreatePostsScreen = ({ navigation }) => {
             >
               <Ionicons
                 name="camera-reverse"
-                size={24}
+                size={26}
                 color={type === 'back' ? '#000000' : '#ffffff'}
               />
             </TouchableOpacity>
