@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Alert,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
@@ -13,25 +14,36 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
-import { collection, addDoc, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 import { styles } from './CommentsScreen.styled';
 
 const dummyUrl = 'https://dummyimage.com/28x28/0e8488/0E8388.jpg';
 
-const Item = ({ item }) => (
-  <View style={styles.itemComments}>
-    <View style={styles.imageWrap}>
-      <Image style={styles.imageAvatar} source={{ uri: dummyUrl }} />
-    </View>
+const Item = ({ item }) => {
+  const formatedDate = new Date(
+    item.createdAt?.seconds * 1000
+  ).toLocaleString();
 
-    <View style={styles.textCommentsWrap}>
-      <Text style={styles.text}>{item.comment}</Text>
-      <Text style={styles.date}>{new Date().toLocaleString()}</Text>
+  return (
+    <View style={styles.itemComments}>
+      <View style={styles.imageWrap}>
+        <Image style={styles.imageAvatar} source={{ uri: dummyUrl }} />
+      </View>
+
+      <View style={styles.textCommentsWrap}>
+        <Text style={styles.text}>{item.comment}</Text>
+        <Text style={styles.date}>{formatedDate}</Text>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export const CommentsScreen = ({ route }) => {
   const { photo, postId } = route.params;
@@ -45,11 +57,17 @@ export const CommentsScreen = ({ route }) => {
   const handleFocus = () => setIsFocus(true);
   const handleBlur = () => setIsFocus(false);
 
+  const notificationPopUp = () =>
+    Alert.alert('Notification', 'Please, enter the text to send a comment', [
+      { text: 'OK', onPress: () => null },
+    ]);
+
   const uploadCommentToServer = async () => {
     const postsRef = collection(db, 'posts');
     await addDoc(collection(postsRef, postId, 'comments'), {
       login,
       comment,
+      createdAt: serverTimestamp(),
     });
   };
 
@@ -65,18 +83,18 @@ export const CommentsScreen = ({ route }) => {
   }, []);
 
   const submitComment = async () => {
-    if (!comment) return;
+    if (!comment) return notificationPopUp();
     uploadCommentToServer();
     setComment('');
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.imageContainer}>
             <Image
               source={{ uri: photo }}
@@ -87,36 +105,36 @@ export const CommentsScreen = ({ route }) => {
               }}
             />
           </View>
+        </TouchableWithoutFeedback>
 
-          <View style={{ height: isFocus ? 70 : 240, marginBottom: 20 }}>
-            <FlatList
-              data={allComments}
-              renderItem={({ item }) => <Item item={item} />}
-              keyExtractor={item => item.id}
-            />
-          </View>
-
-          <View style={styles.inputWrap}>
-            <TextInput
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChangeText={handleInput}
-              value={comment}
-              keyboardType="default"
-              placeholderTextColor="#BDBDBD"
-              placeholder="Комментировать..."
-              style={styles.input}
-            />
-            <TouchableOpacity
-              onPress={submitComment}
-              activeOpacity={0.8}
-              style={styles.btnSendComment}
-            >
-              <Feather name="arrow-up" size={24} color="#ffffff" />
-            </TouchableOpacity>
-          </View>
+        <View style={{ height: isFocus ? 70 : 240, marginBottom: 20 }}>
+          <FlatList
+            data={allComments}
+            renderItem={({ item }) => <Item item={item} />}
+            keyExtractor={item => item.id}
+          />
         </View>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+
+        <View style={styles.inputWrap}>
+          <TextInput
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChangeText={handleInput}
+            value={comment}
+            keyboardType="default"
+            placeholderTextColor="#BDBDBD"
+            placeholder="Комментировать..."
+            style={styles.input}
+          />
+          <TouchableOpacity
+            onPress={submitComment}
+            activeOpacity={0.8}
+            style={styles.btnSendComment}
+          >
+            <Feather name="arrow-up" size={24} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
