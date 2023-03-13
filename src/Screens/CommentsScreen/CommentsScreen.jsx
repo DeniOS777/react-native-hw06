@@ -63,15 +63,17 @@ export const CommentsScreen = ({ route }) => {
     ]);
 
   const uploadCommentToServer = async () => {
-    const postsRef = collection(db, 'posts');
-    await addDoc(collection(postsRef, postId, 'comments'), {
-      login,
-      comment,
-      createdAt: serverTimestamp(),
-    });
+    try {
+      const postsRef = collection(db, 'posts');
+      await addDoc(collection(postsRef, postId, 'comments'), {
+        login,
+        comment,
+        createdAt: serverTimestamp(),
+      });
+    } catch (error) {}
   };
 
-  const downloadCommentsFromServer = async () => {
+  const downloadCommentsFromServer = () => {
     const postsRef = collection(db, 'posts');
     onSnapshot(collection(postsRef, postId, 'comments'), data =>
       setAllComments(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
@@ -82,7 +84,7 @@ export const CommentsScreen = ({ route }) => {
     downloadCommentsFromServer();
   }, []);
 
-  const submitComment = async () => {
+  const submitComment = () => {
     if (!comment) return notificationPopUp();
     uploadCommentToServer();
     setComment('');

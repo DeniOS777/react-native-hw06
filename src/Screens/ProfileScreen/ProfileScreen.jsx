@@ -87,10 +87,12 @@ export const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const getPostsCurrentUser = async () => {
-    const q = query(collection(db, 'posts'), where('userId', '==', userId));
-    onSnapshot(q, data =>
-      setUserPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-    );
+    try {
+      const q = query(collection(db, 'posts'), where('userId', '==', userId));
+      onSnapshot(q, data =>
+        setUserPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+      );
+    } catch (error) {}
   };
 
   useEffect(() => {
