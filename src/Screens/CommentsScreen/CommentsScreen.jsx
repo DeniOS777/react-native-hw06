@@ -24,7 +24,7 @@ import { db } from '../../firebase/config';
 
 import { styles } from './CommentsScreen.styled';
 
-const dummyUrl = 'https://dummyimage.com/28x28/0e8488/0E8388.jpg';
+const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
 const Item = ({ item }) => {
   const formatedDate = new Date(
@@ -34,7 +34,7 @@ const Item = ({ item }) => {
   return (
     <View style={styles.itemComments}>
       <View style={styles.imageWrap}>
-        <Image style={styles.imageAvatar} source={{ uri: dummyUrl }} />
+        <Image style={styles.imageAvatar} source={item.avatar ?? dummyAvatar} />
       </View>
 
       <View style={styles.textCommentsWrap}>
@@ -47,7 +47,7 @@ const Item = ({ item }) => {
 
 export const CommentsScreen = ({ route }) => {
   const { photo, postId } = route.params;
-  const { login } = useSelector(state => state.auth);
+  const { login, avatar } = useSelector(state => state.auth);
   const [comment, setComment] = useState('');
   const [allComments, setAllComments] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
@@ -67,10 +67,13 @@ export const CommentsScreen = ({ route }) => {
       const postsRef = collection(db, 'posts');
       await addDoc(collection(postsRef, postId, 'comments'), {
         login,
+        avatar,
         comment,
         createdAt: serverTimestamp(),
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const downloadCommentsFromServer = () => {

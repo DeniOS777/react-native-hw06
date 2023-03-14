@@ -62,8 +62,6 @@ export const RegistrationScreen = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
@@ -129,7 +127,6 @@ export const RegistrationScreen = ({ navigation }) => {
     }
   };
 
-  console.log(image);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.containerPage}>
@@ -222,6 +219,7 @@ export const RegistrationScreen = ({ navigation }) => {
               </View>
 
               <TouchableOpacity
+                disabled={isLoading ? true : false}
                 onPress={handleSubmit}
                 activeOpacity={0.8}
                 style={styles.button}

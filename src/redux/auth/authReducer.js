@@ -15,20 +15,20 @@ export const authSlice = createSlice({
     avatar: null,
     isLoading: false,
     isLogedIn: false,
+    error: null,
   },
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(authSignUpUser.pending, state => {
-        // state.isLoading = true;
-      })
       .addCase(authSignUpUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
         state.avatar = payload.avatar;
         state.isLogedIn = true;
-        // state.isLoading = false;
+      })
+      .addCase(authSignUpUser.rejected, (state, { payload }) => {
+        state.error = payload;
       })
       .addCase(authSignInUser.pending, state => {
         state.isLoading = true;
@@ -40,6 +40,9 @@ export const authSlice = createSlice({
         state.avatar = payload.avatar;
         state.isLogedIn = true;
         state.isLoading = false;
+      })
+      .addCase(authSignInUser.rejected, (state, { payload }) => {
+        state.error = payload;
       })
       .addCase(authRefreshUser, (state, { payload }) => {
         state.userId = payload.userId;
@@ -54,6 +57,9 @@ export const authSlice = createSlice({
         state.login = null;
         state.email = null;
         state.isLogedIn = false;
+      })
+      .addCase(authSignOutUser.rejected, (state, { payload }) => {
+        state.error = payload;
       });
   },
 });

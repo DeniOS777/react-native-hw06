@@ -53,6 +53,8 @@ export const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
   },
   textCommentsWrap: {
     padding: 16,
