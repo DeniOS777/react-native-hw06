@@ -53,7 +53,8 @@ export const RegistrationScreen = ({ navigation }) => {
       { text: 'OK', onPress: () => null },
     ]);
 
-  //------------------------------------------------------------------------------//
+  const deletePpickedImage = () => setImage(null);
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -66,7 +67,6 @@ export const RegistrationScreen = ({ navigation }) => {
       setImage(result.assets[0].uri);
     }
   };
-  //------------------------------------------------------------------------------//
 
   const handleFocusLogin = () => {
     setFocusedLogin(true);
@@ -149,13 +149,23 @@ export const RegistrationScreen = ({ navigation }) => {
                 />
               </View>
 
-              <TouchableOpacity
-                onPress={pickImage}
-                activeOpacity={0.5}
-                style={styles.btnDeleteAvatar}
-              >
-                <Feather name="plus-circle" size={24} color="#FF6C00" />
-              </TouchableOpacity>
+              {image ? (
+                <TouchableOpacity
+                  onPress={deletePpickedImage}
+                  activeOpacity={0.5}
+                  style={styles.btnDeleteAvatar}
+                >
+                  <Feather name="plus-circle" size={24} color="#E8E8E8" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={pickImage}
+                  activeOpacity={0.5}
+                  style={styles.btnAddAvatar}
+                >
+                  <Feather name="plus-circle" size={24} color="#FF6C00" />
+                </TouchableOpacity>
+              )}
 
               <Text style={styles.title}>Регистрация</Text>
 

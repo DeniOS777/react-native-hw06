@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     zIndex: 10,
     position: 'absolute',
     top: 22,
-    right: 115,
+    right: 117,
     transform: [{ rotate: '45deg' }],
     borderRadius: '50%',
     backgroundColor: '#fff',

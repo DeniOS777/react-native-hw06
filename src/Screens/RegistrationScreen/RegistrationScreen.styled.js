@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     height: 120,
     objectFit: 'cover',
   },
-  btnDeleteAvatar: {
+  btnAddAvatar: {
     zIndex: 10,
     position: 'absolute',
     top: 22,

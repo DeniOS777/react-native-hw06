@@ -31,10 +31,15 @@ const Item = ({ item }) => {
     item.createdAt?.seconds * 1000
   ).toLocaleString();
 
+  console.log(item.avatar);
+
   return (
     <View style={styles.itemComments}>
       <View style={styles.imageWrap}>
-        <Image style={styles.imageAvatar} source={item.avatar ?? dummyAvatar} />
+        <Image
+          style={styles.imageAvatar}
+          source={item.avatar ? { uri: item.avatar } : dummyAvatar}
+        />
       </View>
 
       <View style={styles.textCommentsWrap}>
@@ -71,9 +76,7 @@ export const CommentsScreen = ({ route }) => {
         comment,
         createdAt: serverTimestamp(),
       });
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   const downloadCommentsFromServer = () => {
