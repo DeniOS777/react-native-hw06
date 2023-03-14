@@ -26,7 +26,7 @@ import { authSignOutUser } from '../../redux/auth/authOperations';
 import { styles } from './ProfileScreen.styled';
 
 const imagePath = require('../../../assets/images/bg-photo.png');
-const avatar = require('../../../assets/userPhoto.jpg');
+const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
 const Item = ({ item, navigation }) => {
   const deletePost = async postId => {
@@ -81,7 +81,7 @@ const Item = ({ item, navigation }) => {
 const ListTitle = ({ title }) => <Text style={styles.listTitle}>{title}</Text>;
 
 export const ProfileScreen = ({ navigation }) => {
-  const { userId, login } = useSelector(state => state.auth);
+  const { userId, login, avatar } = useSelector(state => state.auth);
   const [userPosts, setUserPosts] = useState([]);
 
   const dispatch = useDispatch();
@@ -104,7 +104,10 @@ export const ProfileScreen = ({ navigation }) => {
       <ImageBackground source={imagePath} style={styles.image}>
         <ScrollView style={{ paddingTop: 120, position: 'relative' }}>
           <View style={styles.containerAvatar}>
-            <Image source={avatar} style={styles.avatar} />
+            <Image
+              source={avatar ? { uri: avatar } : dummyAvatar}
+              style={styles.avatar}
+            />
           </View>
 
           <TouchableOpacity

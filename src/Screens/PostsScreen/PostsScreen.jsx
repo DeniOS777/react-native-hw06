@@ -8,6 +8,8 @@ import { db } from '../../firebase/config';
 
 import { styles } from './PostsScreen.styled';
 
+const dummyAvatar = require('../../../assets/dummyUserProfile.png');
+
 const Item = ({ item, navigation }) => {
   const deletePost = async postId => {
     try {
@@ -61,7 +63,7 @@ const Item = ({ item, navigation }) => {
 
 export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
-  const { login, email } = useSelector(state => state.auth);
+  const { login, email, avatar } = useSelector(state => state.auth);
 
   const getAllPosts = () => {
     onSnapshot(collection(db, 'posts'), data =>
@@ -79,7 +81,7 @@ export const PostsScreen = ({ navigation }) => {
         <View style={styles.wrapImageProfile}>
           <Image
             style={styles.imageProfile}
-            source={require('../../../assets/userPhoto.jpg')}
+            source={avatar ? { uri: avatar } : dummyAvatar}
           />
         </View>
 

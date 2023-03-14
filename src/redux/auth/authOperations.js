@@ -11,13 +11,14 @@ import { auth } from '../../firebase/config';
 
 export const authSignUpUser = createAsyncThunk(
   'auth/signup',
-  async ({ login, email, password }, thunkAPI) => {
+  async ({ userPhoto, login, email, password }, thunkAPI) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
-      await updateProfile(user, { displayName: login });
-      const { displayName, email: userEmail, uid } = auth.currentUser;
+      await updateProfile(user, { displayName: login, photoURL: userPhoto });
+      const { photoURL, displayName, email: userEmail, uid } = auth.currentUser;
       const dataToUpdate = {
+        avatar: photoURL,
         login: displayName,
         email: userEmail,
         userId: uid,
@@ -35,6 +36,7 @@ export const authSignInUser = createAsyncThunk(
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       const dataToWrite = {
+        avatar: user.photoURL,
         login: user.displayName,
         email: user.email,
         userId: user.uid,
@@ -55,6 +57,7 @@ export const authChangeStateUser = createAsyncThunk(
       onAuthStateChanged(auth, user => {
         if (user) {
           const dataToUpdate = {
+            avatar: user.photoURL,
             login: user.displayName,
             email: user.email,
             userId: user.uid,

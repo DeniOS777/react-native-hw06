@@ -12,6 +12,7 @@ export const authSlice = createSlice({
     userId: null,
     login: null,
     email: null,
+    avatar: null,
     isLoading: false,
     isLogedIn: false,
   },
@@ -19,14 +20,15 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(authSignUpUser.pending, state => {
-        state.isLoading = true;
+        // state.isLoading = true;
       })
       .addCase(authSignUpUser.fulfilled, (state, { payload }) => {
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
+        state.avatar = payload.avatar;
         state.isLogedIn = true;
-        state.isLoading = false;
+        // state.isLoading = false;
       })
       .addCase(authSignInUser.pending, state => {
         state.isLoading = true;
@@ -35,6 +37,7 @@ export const authSlice = createSlice({
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
+        state.avatar = payload.avatar;
         state.isLogedIn = true;
         state.isLoading = false;
       })
@@ -42,9 +45,11 @@ export const authSlice = createSlice({
         state.userId = payload.userId;
         state.login = payload.login;
         state.email = payload.email;
+        state.avatar = payload.avatar;
         state.isLogedIn = true;
       })
       .addCase(authSignOutUser.fulfilled, state => {
+        state.avatar = null;
         state.userId = null;
         state.login = null;
         state.email = null;

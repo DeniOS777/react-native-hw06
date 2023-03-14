@@ -127,7 +127,7 @@ const HomeTab = ({ navigation, route }) => {
 export const chooseNavigation = isLogedIn => {
   if (!isLogedIn) {
     return (
-      <AuthStack.Navigator initialRouteName="RegistrationScreen">
+      <AuthStack.Navigator initialRouteName="Login">
         <AuthStack.Screen
           options={{ headerShown: false }}
           name="Registration"

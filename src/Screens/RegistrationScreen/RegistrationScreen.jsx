@@ -13,27 +13,32 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import uuid from 'react-native-uuid';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase/config';
 import { authSignUpUser } from '../../redux/auth/authOperations';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { styles } from './RegistrationScreen.styled';
 
 const imagePath = require('../../../assets/images/bg-photo.png');
-const avatar = require('../../../assets/userPhoto.jpg');
+const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
 export const RegistrationScreen = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [image, setImage] = useState(null);
   const [isFocusedLogin, setFocusedLogin] = useState(false);
   const [isFocusedEmail, setFocusedEmail] = useState(false);
   const [isFocusedPassword, setFocusedPassword] = useState(false);
   const [isSpaceKeyboard, setIsSpaceKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const { isLoading } = useSelector(state => state.auth);
 
   const handleLogin = text => setLogin(text);
   const handleEmail = text => setEmail(text);
@@ -47,6 +52,23 @@ export const RegistrationScreen = ({ navigation }) => {
     Alert.alert('Notification', 'Please, fill in all fields to register', [
       { text: 'OK', onPress: () => null },
     ]);
+
+  //------------------------------------------------------------------------------//
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+  //------------------------------------------------------------------------------//
 
   const handleFocusLogin = () => {
     setFocusedLogin(true);
@@ -80,14 +102,34 @@ export const RegistrationScreen = ({ navigation }) => {
     setIsShowPassword(isShowPassword => !isShowPassword);
   };
 
-  const handleSubmit = () => {
-    if (!login || !email || !password) return notificationPopUp();
-    dispatch(authSignUpUser({ login, email, password }));
-    setLogin('');
-    setEmail('');
-    setPassword('');
+  const uploadPhotoToStorage = async () => {
+    try {
+      const response = await fetch(image);
+      const file = await response.blob();
+      const photoId = uuid.v4();
+      const storageRef = ref(storage, `userAvatar/${photoId}`);
+      await uploadBytes(storageRef, file);
+      return await getDownloadURL(ref(storage, `userAvatar/${photoId}`));
+    } catch (error) {}
   };
 
+  const handleSubmit = async () => {
+    if (!login || !email || !password) return notificationPopUp();
+    try {
+      setIsLoading(true);
+      const userPhoto = await uploadPhotoToStorage();
+      dispatch(authSignUpUser({ userPhoto, login, email, password }));
+      setImage('');
+      setLogin('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  console.log(image);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.containerPage}>
@@ -103,11 +145,15 @@ export const RegistrationScreen = ({ navigation }) => {
               }}
             >
               <View style={styles.containerAvatar}>
-                <Image source={avatar} alt="user photo" style={styles.avatar} />
+                <Image
+                  source={image ? { uri: image } : dummyAvatar}
+                  alt="user photo"
+                  style={styles.avatar}
+                />
               </View>
 
               <TouchableOpacity
-                onPress={null}
+                onPress={pickImage}
                 activeOpacity={0.5}
                 style={styles.btnDeleteAvatar}
               >

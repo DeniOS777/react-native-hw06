@@ -17,9 +17,12 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   imageProfile: {
+    display: 'block',
     width: 60,
     height: 60,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   textName: {
     marginBottom: 8,
