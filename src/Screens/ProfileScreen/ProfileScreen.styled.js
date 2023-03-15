@@ -37,7 +37,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
-    color: '#BDBDBD',
   },
   textPlace: {
     marginLeft: 6,

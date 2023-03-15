@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { EvilIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  getCountFromServer,
+} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 import { styles } from './PostsScreen.styled';
@@ -11,11 +18,21 @@ import { styles } from './PostsScreen.styled';
 const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
 const Item = ({ item, navigation }) => {
+  const [count, setCount] = useState(0);
+
   const deletePost = async postId => {
     try {
       await deleteDoc(doc(db, 'posts', `${postId}`));
     } catch (error) {}
   };
+
+  useEffect(() => {
+    (async () => {
+      const coll = collection(db, `posts/${item.id}/comments`);
+      const snapshot = await getCountFromServer(coll);
+      setCount(snapshot.data().count);
+    })();
+  }, []);
 
   return (
     <View style={{ marginBottom: 32 }}>
@@ -42,9 +59,20 @@ const Item = ({ item, navigation }) => {
               })
             }
           >
-            <EvilIcons name="comment" size={24} color="#BDBDBD" />
+            <FontAwesome
+              name="comment"
+              size={20}
+              color={count > 0 ? '#FF6C00' : '#BDBDBD'}
+            />
           </TouchableOpacity>
-          <Text style={styles.textComment}>1</Text>
+          <Text
+            style={{
+              ...styles.textComment,
+              color: count > 0 ? '#2a2a2a' : '#BDBDBD',
+            }}
+          >
+            {count}
+          </Text>
         </View>
 
         <View style={styles.wrapContainer}>
