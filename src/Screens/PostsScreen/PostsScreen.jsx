@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { EvilIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -28,9 +35,11 @@ const Item = ({ item, navigation }) => {
 
   useEffect(() => {
     (async () => {
-      const coll = collection(db, `posts/${item.id}/comments`);
-      const snapshot = await getCountFromServer(coll);
-      setCount(snapshot.data().count);
+      try {
+        const coll = collection(db, `posts/${item.id}/comments`);
+        const snapshot = await getCountFromServer(coll);
+        setCount(snapshot.data().count);
+      } catch (error) {}
     })();
   }, []);
 
@@ -63,6 +72,9 @@ const Item = ({ item, navigation }) => {
               name="comment"
               size={20}
               color={count > 0 ? '#FF6C00' : '#BDBDBD'}
+              style={{
+                transform: [{ rotateY: '180deg' }],
+              }}
             />
           </TouchableOpacity>
           <Text
