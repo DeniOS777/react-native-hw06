@@ -42,8 +42,8 @@ const HomeTab = ({ navigation, route }) => {
           headerTitleAlign: 'center',
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#dcdcdc',
-            backgroundColor: '#f8f8ff',
+            borderBottomColor: '#778899',
+            backgroundColor: '#c0c0c0',
           },
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           tabBarIconStyle: { marginLeft: 45 },
@@ -77,8 +77,8 @@ const HomeTab = ({ navigation, route }) => {
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#dcdcdc',
-            backgroundColor: '#f8f8ff',
+            borderBottomColor: '#778899',
+            backgroundColor: '#c0c0c0',
           },
           tabBarStyle: { height: 82, borderTopColor: 'transparent' },
           headerLeft: () => (
@@ -155,8 +155,8 @@ export const chooseNavigation = isLogedIn => {
           headerBackTitleVisible: false,
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#dcdcdc',
-            backgroundColor: '#f8f8ff',
+            borderBottomColor: '#778899',
+            backgroundColor: '#c0c0c0',
           },
           headerLeft: () => {
             const navigation = useNavigation();
@@ -180,8 +180,8 @@ export const chooseNavigation = isLogedIn => {
           headerBackTitleVisible: false,
           headerStyle: {
             borderBottomWidth: 1,
-            borderBottomColor: '#dcdcdc',
-            backgroundColor: '#f8f8ff',
+            borderBottomColor: '#778899',
+            backgroundColor: '#c0c0c0',
           },
           headerLeft: () => {
             const navigation = useNavigation();

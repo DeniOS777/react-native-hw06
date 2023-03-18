@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { useSelector } from 'react-redux';
+import { Text, View, Alert, Image, TouchableOpacity } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+// import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+// import { useSelector, useDispatch } from 'react-redux';
 import {
   collection,
-  onSnapshot,
-  doc,
-  deleteDoc,
   getCountFromServer,
+  deleteDoc,
+  doc,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+// import { authSignOutUser } from '../../redux/auth/authOperations';
 
-import { styles } from './PostsScreen.styled';
+// import { styles } from './ProfileScreen.styled';
+import { styles } from './ItemList.styled';
 
-const dummyAvatar = require('../../../assets/dummyUserProfile.png');
+// const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
-const Item = ({ item, navigation }) => {
+export const ItemList = ({ item, navigation }) => {
   const [count, setCount] = useState(0);
 
   const confirmationPopUp = postId =>
@@ -41,18 +36,15 @@ const Item = ({ item, navigation }) => {
 
   useEffect(() => {
     (async () => {
-      try {
-        const coll = collection(db, `posts/${item.id}/comments`);
-        const snapshot = await getCountFromServer(coll);
-        setCount(snapshot.data().count);
-      } catch (error) {}
+      const coll = collection(db, `posts/${item.id}/comments`);
+      const snapshot = await getCountFromServer(coll);
+      setCount(snapshot.data().count);
     })();
   }, []);
 
   return (
     <View style={{ marginBottom: 32 }}>
       <Image style={styles.imagePosts} source={{ uri: `${item.photo}` }} />
-
       <View style={styles.wrapTitleAndDelete}>
         <Text style={styles.imageTitle}>{item.title}</Text>
         <TouchableOpacity
@@ -78,9 +70,6 @@ const Item = ({ item, navigation }) => {
               name="comment"
               size={20}
               color={count > 0 ? '#FF6C00' : '#BDBDBD'}
-              style={{
-                transform: [{ rotateY: '180deg' }],
-              }}
             />
           </TouchableOpacity>
           <Text
@@ -102,50 +91,6 @@ const Item = ({ item, navigation }) => {
             <Text style={styles.textPlace}>{item.place}</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </View>
-  );
-};
-
-export const PostsScreen = ({ navigation }) => {
-  const [posts, setPosts] = useState([]);
-  const { login, email, avatar } = useSelector(state => state.auth);
-
-  const getAllPosts = () => {
-    onSnapshot(collection(db, 'posts'), data =>
-      setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-    );
-  };
-
-  useEffect(() => {
-    getAllPosts();
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.containerProfile}>
-        <View style={styles.wrapImageProfile}>
-          <Image
-            style={styles.imageProfile}
-            source={avatar ? { uri: avatar } : dummyAvatar}
-          />
-        </View>
-
-        <View>
-          <Text style={styles.textName}>{login}</Text>
-          <Text style={styles.textEmail}>{email}</Text>
-        </View>
-      </View>
-
-      <View style={{ paddingBottom: 90 }}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={posts}
-          renderItem={({ item }) => (
-            <Item navigation={navigation} item={item} />
-          )}
-          keyExtractor={item => item.id}
-        />
       </View>
     </View>
   );
