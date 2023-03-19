@@ -1,111 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { Text, View, Image, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
-import { EvilIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import {
-  collection,
-  onSnapshot,
-  doc,
-  deleteDoc,
-  getCountFromServer,
-} from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { ItemList } from '../../components/ItemList';
 
 import { styles } from './PostsScreen.styled';
 
 const dummyAvatar = require('../../../assets/dummyUserProfile.png');
-
-const Item = ({ item, navigation }) => {
-  const [count, setCount] = useState(0);
-
-  const confirmationPopUp = postId =>
-    Alert.alert('Confirm', 'Are you sure that you want to delete this post?', [
-      { text: 'Cancel', onPress: () => null },
-      { text: 'Yes', onPress: () => deletePost(postId) },
-    ]);
-
-  const deletePost = async postId => {
-    try {
-      await deleteDoc(doc(db, 'posts', `${postId}`));
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const coll = collection(db, `posts/${item.id}/comments`);
-        const snapshot = await getCountFromServer(coll);
-        setCount(snapshot.data().count);
-      } catch (error) {}
-    })();
-  }, []);
-
-  return (
-    <View style={{ marginBottom: 32 }}>
-      <Image style={styles.imagePosts} source={{ uri: `${item.photo}` }} />
-
-      <View style={styles.wrapTitleAndDelete}>
-        <Text style={styles.imageTitle}>{item.title}</Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => confirmationPopUp(item.id)}
-        >
-          <Feather name="trash-2" size={24} color="#b22222" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.descriptionContainer}>
-        <View style={styles.wrapContainer}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() =>
-              navigation.navigate('Comments', {
-                photo: item.photo,
-                postId: item.id,
-              })
-            }
-          >
-            <FontAwesome
-              name="comment"
-              size={20}
-              color={count > 0 ? '#FF6C00' : '#BDBDBD'}
-              style={{
-                transform: [{ rotateY: '180deg' }],
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              ...styles.textComment,
-              color: count > 0 ? '#2a2a2a' : '#BDBDBD',
-            }}
-          >
-            {count}
-          </Text>
-        </View>
-
-        <View style={styles.wrapContainer}>
-          <EvilIcons name="location" size={24} color="#BDBDBD" />
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Map', { ...item.location })}
-            activeOpacity={0.5}
-          >
-            <Text style={styles.textPlace}>{item.place}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-};
 
 export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -142,7 +44,7 @@ export const PostsScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           data={posts}
           renderItem={({ item }) => (
-            <Item navigation={navigation} item={item} />
+            <ItemList navigation={navigation} item={item} />
           )}
           keyExtractor={item => item.id}
         />

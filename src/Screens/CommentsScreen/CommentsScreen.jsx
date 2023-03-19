@@ -31,8 +31,6 @@ const Item = ({ item }) => {
     item.createdAt?.seconds * 1000
   ).toLocaleString();
 
-  console.log(item.avatar);
-
   return (
     <View style={styles.itemComments}>
       <View style={styles.imageWrap}>
@@ -115,8 +113,14 @@ export const CommentsScreen = ({ route }) => {
           </View>
         </TouchableWithoutFeedback>
 
-        <View style={{ height: isFocus ? 70 : 240, marginBottom: 20 }}>
+        <View
+          style={{
+            height: isFocus ? 70 : 240,
+            marginBottom: isFocus ? 16 : 36,
+          }}
+        >
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={allComments}
             renderItem={({ item }) => <Item item={item} />}
             keyExtractor={item => item.id}
@@ -129,17 +133,23 @@ export const CommentsScreen = ({ route }) => {
             onBlur={handleBlur}
             onChangeText={handleInput}
             value={comment}
+            textAlignVertical="center"
+            multiline={true}
             keyboardType="default"
             placeholderTextColor="#BDBDBD"
             placeholder="Комментировать..."
-            style={styles.input}
+            style={{
+              ...styles.input,
+              borderRadius: comment.length >= 40 ? 8 : 50,
+              height: comment.length >= 40 ? 50 : 32,
+            }}
           />
           <TouchableOpacity
             onPress={submitComment}
             activeOpacity={0.8}
             style={styles.btnSendComment}
           >
-            <Feather name="arrow-up" size={24} color="#ffffff" />
+            <Feather name="arrow-up" size={20} color="#ffffff" />
           </TouchableOpacity>
         </View>
       </View>

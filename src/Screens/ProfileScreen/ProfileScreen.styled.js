@@ -10,42 +10,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     resizeMode: 'cover',
   },
-  imagePosts: {
-    width: '100%',
-    height: 240,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  imageTitle: {
-    marginBottom: 8,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#212121',
-  },
-  descriptionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  wrapContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textComment: {
-    marginLeft: 6,
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 19,
-  },
-  textPlace: {
-    marginLeft: 6,
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#212121',
-    textDecorationLine: 'underline',
-  },
   listTitle: {
     marginBottom: 32,
     textAlign: 'center',
@@ -94,11 +58,5 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     paddingBottom: 130,
     minHeight: 750,
-  },
-  wrapTitleAndDelete: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
   },
 });

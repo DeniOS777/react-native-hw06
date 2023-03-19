@@ -41,9 +41,9 @@ const HomeTab = ({ navigation, route }) => {
           title: 'Публикации',
           headerTitleAlign: 'center',
           headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: '#778899',
-            backgroundColor: '#c0c0c0',
+            borderBottomWidth: 0.5,
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           tabBarIconStyle: { marginLeft: 45 },
@@ -76,9 +76,9 @@ const HomeTab = ({ navigation, route }) => {
           headerTitleAlign: 'center',
           headerTitleStyle: { fontFamily: 'Roboto-Medium' },
           headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: '#778899',
-            backgroundColor: '#c0c0c0',
+            borderBottomWidth: 0.5,
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           tabBarStyle: { height: 82, borderTopColor: 'transparent' },
           headerLeft: () => (
@@ -154,9 +154,9 @@ export const chooseNavigation = isLogedIn => {
           headerTitleAlign: 'center',
           headerBackTitleVisible: false,
           headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: '#778899',
-            backgroundColor: '#c0c0c0',
+            borderBottomWidth: 0.5,
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerLeft: () => {
             const navigation = useNavigation();
@@ -179,9 +179,9 @@ export const chooseNavigation = isLogedIn => {
           title: 'Карта',
           headerBackTitleVisible: false,
           headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: '#778899',
-            backgroundColor: '#c0c0c0',
+            borderBottomWidth: 0.5,
+            borderBottomColor: '#dcdcdc',
+            backgroundColor: '#f8f8ff',
           },
           headerLeft: () => {
             const navigation = useNavigation();

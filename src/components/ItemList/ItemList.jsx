@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Alert, Image, TouchableOpacity } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
-// import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-// import { useSelector, useDispatch } from 'react-redux';
 import {
   collection,
   getCountFromServer,
@@ -12,12 +10,8 @@ import {
   doc,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-// import { authSignOutUser } from '../../redux/auth/authOperations';
 
-// import { styles } from './ProfileScreen.styled';
 import { styles } from './ItemList.styled';
-
-// const dummyAvatar = require('../../../assets/dummyUserProfile.png');
 
 export const ItemList = ({ item, navigation }) => {
   const [count, setCount] = useState(0);
